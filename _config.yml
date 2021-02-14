@@ -49,26 +49,22 @@ skills:
 
 #Work experience is required
 roles:
- - title: CTO
-   start: 2017
-   end: Ongoing
-   employer: Basement Crowd
-   description: Legaltech startup producing a range of innovative legal products. Products include <a href="https://www.juriosity.com" taget="_blank">Juriosity</a>, <a href="https://www.fromcounsel.com" taget="_blank">FromCounsel</a>, <a href="https://www.sparqa.com" taget="_blank">Sparqa</a>.
- - title: Senior Engineer
+ - title: Risk Management Consultant
    start: 2016
-   end: 2017
-   employer: Emerald Street Ventures
-   description: Emerald Street Ventures was established as an incubator vehicle for the development of a number of software and legal-tech projects, and a rapidly growing, London-based start-up using innovative technologies to revolutionise and change the software and legal-tech landscape. Working with a range of cutting edge technologies and techniques including Scala, Cassandra, CoreOS, a variety of Machine Learning techniques.
- - title: Teaching Assistant
-   start: 2015
-   end: 2016
-   employer: Marmara University Economics Department
-   description: Teaching assistant of undergraduate Econometrics course in Department of Economics <br/> <ul> <li> Developed problem solving sessions for the course </li> <li> Evaluated students by making quizzes </li> </ul>
+   end: Ongoing
+   employer: Finecus Software and Consultancy
+   description: 
  - title: Intern
    start: 2016
    end: 2016
    employer: Central Bank of the Republic of Turkey
    description: Internship at Banking and Financial Institutions division.
+ - title: Teaching Assistant
+   start: 2015
+   end: 2016
+   employer: Marmara University Economics Department
+   description: Teaching assistant of undergraduate Econometrics course in Department of Economics <br/> <ul> <li> Developed problem solving sessions for the course </li> <li> Evaluated students by making quizzes </li> </ul>
+
 
 #Education is required
 education:
