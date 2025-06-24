@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback & Support - Orkestrix</title>
+    <meta name="description" content="Send feedback, report bugs, or request features for Orkestrix - Professional container management for macOS 26.">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #007AFF;
+            --primary-dark: #0056CC;
+            --secondary: #5856D6;
+            --text-primary: #1D1D1F;
+            --text-secondary: #6E6E73;
+            --background: #FAFAFA;
+            --surface: #FFFFFF;
+            --border: #E5E5E7;
+            --success: #30D158;
+            --warning: #FF9F0A;
+            --error: #FF3B30;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary: #0A84FF;
+                --primary-dark: #0969DA;
+                --secondary: #5E5CE6;
+                --text-primary: #FFFFFF;
+                --text-secondary: #8E8E93;
+                --background: #000000;
+                --surface: #1C1C1E;
+                --border: #38383A;
+                --success: #30D158;
+                --warning: #FF9F0A;
+                --error: #FF3B30;
+            }
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--background);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 6px;
+        }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        main {
+            padding: 80px 0;
+        }
+        
+        .feedback-content {
+            background: var(--surface);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 48px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+        
+        .feedback-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        
+        .feedback-card {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .feedback-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .feedback-card.selected {
+            border-color: var(--primary);
+            background: rgba(0, 122, 255, 0.05);
+        }
+        
+        .feedback-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .feedback-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .form-section {
+            margin-top: 32px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .submit-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .submit-btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+        }
+        
+        .contact-methods {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        
+        .contact-card {
+            background: var(--background);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .contact-card h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        
+        .contact-card p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+        
+        .contact-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+        
+        .info-box {
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid rgba(0, 122, 255, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 24px 0;
+        }
+        
+        .info-box p {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        footer p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .feedback-content {
+                padding: 24px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .feedback-types {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <img src="https://raw.githubusercontent.com/burakcebecioglu/burakcebecioglu.github.io/c7655e1a08e2257d149691dee9ef56dcf94d0f11/assets/icon.svg" alt="Orkestrix">
+                </div>
+                Orkestrix
+            </a>
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="feedback-content">
+                <h1>Feedback & Support</h1>
+                <p class="subtitle">Help us improve Orkestrix by sharing your thoughts, reporting issues, or requesting new features.</p>
+                
+                <div class="feedback-types">
+                    <div class="feedback-card" onclick="selectFeedbackType('bug')">
+                        <h3>🐛 Bug Report</h3>
+                        <p>Report crashes, unexpected behavior, or functionality issues you've encountered.</p>
+                    </div>
+                    
+                    <div class="feedback-card" onclick="selectFeedbackType('feature')">
+                        <h3>💡 Feature Request</h3>
+                        <p>Suggest new features, improvements, or enhancements you'd like to see.</p>
+                    </div>
+                    
+                    <div class="feedback-card" onclick="selectFeedbackType('performance')">
+                        <h3>⚡ Performance Issue</h3>
+                        <p>Report slow performance, high memory usage, or resource-related problems.</p>
+                    </div>
+                    
+                    <div class="feedback-card" onclick="selectFeedbackType('ui')">
+                        <h3>🎨 UI/UX Feedback</h3>
+                        <p>Share thoughts on the interface design, user experience, or usability.</p>
+                    </div>
+                    
+                    <div class="feedback-card" onclick="selectFeedbackType('docs')">
+                        <h3>📚 Documentation</h3>
+                        <p>Report unclear documentation, missing guides, or suggest improvements.</p>
+                    </div>
+                    
+                    <div class="feedback-card" onclick="selectFeedbackType('general')">
+                        <h3>💬 General Feedback</h3>
+                        <p>Share general thoughts, suggestions, or anything else about Orkestrix.</p>
+                    </div>
+                </div>
+
+                <form class="form-section" id="feedbackForm">
+                    <input type="hidden" id="feedbackType" name="type" value="">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Name (Optional)</label>
+                            <input type="text" id="name" name="name" placeholder="Your name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email (Optional)</label>
+                            <input type="email" id="email" name="email" placeholder="your@email.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject *</label>
+                        <input type="text" id="subject" name="subject" placeholder="Enter a topic for your feedback" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="version">Orkestrix Version</label>
+                        <input type="text" id="version" name="version" placeholder="e.g., 1.0.0 (found in About menu)">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="macos">macOS Version</label>
+                            <input type="text" id="macos" name="macos" placeholder="e.g., macOS 26.0 beta">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="device">Mac Model</label>
+                            <input type="text" id="device" name="device" placeholder="e.g., MacBook Pro M3">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="priority">Priority</label>
+                        <select id="priority" name="priority">
+                            <option value="low">Low - Enhancement or minor issue</option>
+                            <option value="medium" selected>Medium - Normal issue or feature</option>
+                            <option value="high">High - Important issue affecting workflow</option>
+                            <option value="critical">Critical - App crash or data loss</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description *</label>
+                        <textarea id="description" name="description" placeholder="Please provide detailed information about your feedback..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group" id="reproductionSteps" style="display: none;">
+                        <label for="steps">Steps to Reproduce</label>
+                        <textarea id="steps" name="steps" placeholder="1. Open Orkestrix&#10;2. Click on...&#10;3. Notice that..."></textarea>
+                    </div>
+                    
+                    <div class="form-group" id="expectedBehavior" style="display: none;">
+                        <label for="expected">Expected Behavior</label>
+                        <textarea id="expected" name="expected" placeholder="What should have happened instead?"></textarea>
+                    </div>
+                    
+                    <div class="info-box">
+                        <p><strong>Note:</strong> This form uses mailto to send feedback through your default email client. Alternatively, you can email us directly at support@orkestrix.app or use the contact methods below.</p>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Feedback</button>
+                </form>
+                
+                <div class="contact-methods">
+                    <h2>Alternative Contact Methods</h2>
+                    
+                    <div class="contact-grid">
+                        <div class="contact-card">
+                            <h4>📧 Direct Email</h4>
+                            <p>Send detailed feedback directly to our support team</p>
+                            <a href="mailto:support@orkestrix.com" class="contact-link">support@orkestrix.com</a>
+                        </div>
+                        
+                        <div class="contact-card">
+                            <h4>📱 App Store Reviews</h4>
+                            <p>Leave a review and rating on the Mac App Store</p>
+                            <a href="https://apps.apple.com/app/orkestrix" class="contact-link" target="_blank" rel="noopener noreferrer">Rate Orkestrix</a>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Orkestrix. All rights reserved.</p>
+            <p style="font-size: 0.85rem; opacity: 0.8;">
+                Apple, macOS, App Store, Swift, SwiftUI, and Apple silicon are trademarks of Apple Inc., registered in the U.S. and other countries.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        let selectedType = '';
+        let selectedPrefix = '';
+        
+        function selectFeedbackType(type) {
+            // Remove previous selection
+            document.querySelectorAll('.feedback-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selection to clicked card
+            event.currentTarget.classList.add('selected');
+            selectedType = type;
+            document.getElementById('feedbackType').value = type;
+            
+            // Show/hide relevant fields
+            const reproductionSteps = document.getElementById('reproductionSteps');
+            const expectedBehavior = document.getElementById('expectedBehavior');
+            
+            if (type === 'bug' || type === 'performance') {
+                reproductionSteps.style.display = 'block';
+                expectedBehavior.style.display = 'block';
+            } else {
+                reproductionSteps.style.display = 'none';
+                expectedBehavior.style.display = 'none';
+            }
+            
+            // Update placeholder text based on type
+            const description = document.getElementById('description');
+            const placeholders = {
+                bug: 'Please describe the bug you encountered in detail. Include what you were doing when it happened, any error messages, and how it affects your workflow.',
+                feature: 'Describe the feature you would like to see added. Explain how it would benefit your workflow and any specific requirements or design ideas you have.',
+                performance: 'Describe the performance issue you\'re experiencing. Include details about when it occurs, system resource usage, and impact on your workflow.',
+                ui: 'Share your thoughts on the user interface and user experience. What works well? What could be improved? Any specific design suggestions?',
+                docs: 'Let us know what documentation is unclear, missing, or could be improved. Include specific sections or topics that need attention.',
+                general: 'Share any thoughts, suggestions, or feedback about Orkestrix. We value all input to help make the app better.'
+            };
+            
+            description.placeholder = placeholders[type] || placeholders.general;
+            
+            // Set prefix for email subject
+            const prefixes = {
+                bug: '[Bug Report] ',
+                feature: '[Feature Request] ',
+                performance: '[Performance] ',
+                ui: '[UI/UX] ',
+                docs: '[Documentation] ',
+                general: '[Feedback] '
+            };
+            selectedPrefix = prefixes[type] || '';
+        }
+        
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            // Construct email
+            let subject = (selectedPrefix || '') + (data.subject || '');
+            let body = `Feedback Type: ${selectedType}\n\n`;
+            if (data.name) body += `Name: ${data.name}\n`;
+            if (data.email) body += `Email: ${data.email}\n`;
+            if (data.version) body += `Orkestrix Version: ${data.version}\n`;
+            if (data.macos) body += `macOS Version: ${data.macos}\n`;
+            if (data.device) body += `Mac Model: ${data.device}\n`;
+            body += `Priority: ${data.priority}\n\n`;
+            body += `Description:\n${data.description}\n\n`;
+            if (data.steps) {
+                body += `Steps to Reproduce:\n${data.steps}\n\n`;
+            }
+            if (data.expected) {
+                body += `Expected Behavior:\n${data.expected}\n\n`;
+            }
+            body += `---\nSent via Orkestrix Feedback Form`;
+            // Create mailto URL
+            const mailtoUrl = `mailto:support@orkestrix.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            // Open email client
+            window.location.href = mailtoUrl;
+        });
+    </script>
+</body>
+</html>

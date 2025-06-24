@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orkestrix - Native macOS Container Management</title>
+    <meta name="description" content="Professional container management for macOS 26. Native SwiftUI interface for Apple's containerization technology with enterprise-grade security.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Container Manager - Native macOS Container Management">
+    <meta property="og:description" content="Professional container management for macOS 26. Native SwiftUI interface for Apple's containerization technology.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Container Manager - Native macOS Container Management">
+    <meta property="twitter:description" content="Professional container management for macOS 26. Native SwiftUI interface for Apple's containerization technology.">
+    
+    <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #007AFF;
+            --primary-dark: #0056CC;
+            --secondary: #5856D6;
+            --text-primary: #1D1D1F;
+            --text-secondary: #6E6E73;
+            --background: #FAFAFA;
+            --surface: #FFFFFF;
+            --border: #E5E5E7;
+            --success: #30D158;
+            --warning: #FF9F0A;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary: #0A84FF;
+                --primary-dark: #0969DA;
+                --secondary: #5E5CE6;
+                --text-primary: #FFFFFF;
+                --text-secondary: #8E8E93;
+                --background: #000000;
+                --surface: #1C1C1E;
+                --border: #38383A;
+                --success: #30D158;
+                --warning: #FF9F0A;
+            }
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--background);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 6px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 80px 0 120px;
+            background: linear-gradient(135deg, var(--background) 0%, #F5F7FA 100%);
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .hero {
+                background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            }
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--text-primary), var(--primary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+        
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+        
+        .btn {
+            padding: 18px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            height: 60px;
+            box-sizing: border-box;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .app-store-badge {
+            display: inline-block;
+            padding: 0;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-decoration: none;
+        }
+        
+        .app-store-badge:hover {
+            transform: translateY(-2px);
+        }
+        
+        .app-store-badge img {
+            height: 60px;
+            width: auto;
+            border-radius: 8px;
+        }
+        
+        .app-store-badge-white {
+            display: block;
+        }
+        
+        .app-store-badge-black {
+            display: none;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .app-store-badge-white {
+                display: none;
+            }
+            
+            .app-store-badge-black {
+                display: block;
+            }
+        }
+        
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .features {
+            padding: 80px 0;
+        }
+        
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature-card {
+            background: var(--surface);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            font-size: 24px;
+            color: white;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .requirements {
+            background: var(--surface);
+            padding: 80px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .requirements-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .requirements h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+        
+        .requirements-list {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+        
+        .requirements-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .requirements-list .check {
+            color: var(--success);
+            font-size: 20px;
+        }
+        
+        .setup-section {
+            padding: 80px 0;
+        }
+        
+        .setup-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 60px;
+        }
+        
+        .setup-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .setup-step {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 auto 24px;
+        }
+        
+        .setup-step h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .setup-step p {
+            color: var(--text-secondary);
+        }
+        
+        .cli-setup {
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            margin-top: 40px;
+        }
+        
+        .cli-setup h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+        }
+        
+        .cli-setup pre {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            margin-bottom: 16px;
+        }
+        
+        .cli-setup code {
+            color: #30D158;
+        }
+        
+        .cli-setup p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .cli-setup a {
+            color: #30D158;
+        }
+        
+        footer {
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 60px 0 40px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+        
+        .footer-section ul li a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-section ul li a:hover {
+            color: #ffffff;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .legal-section {
+            padding: 80px 0;
+            background: var(--background);
+        }
+        
+        .legal-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .legal-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .legal-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .legal-card:hover {
+            border-color: var(--primary);
+        }
+        
+        .legal-header {
+            padding: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface);
+            transition: background-color 0.2s;
+        }
+        
+        .legal-header:hover {
+            background: var(--background);
+        }
+        
+        .legal-header h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--text-primary);
+        }
+        
+        .legal-toggle {
+            font-size: 24px;
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+        
+        .legal-toggle.expanded {
+            transform: rotate(180deg);
+        }
+        
+        .legal-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 24px;
+        }
+        
+        .legal-content.expanded {
+            max-height: 2000px;
+            padding: 0 24px 24px 24px;
+        }
+        
+        .legal-content h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 24px 0 12px 0;
+            color: var(--text-primary);
+        }
+        
+        .legal-content p {
+            margin-bottom: 16px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        
+        .legal-content ul {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+        
+        .legal-content li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+        
+        .legal-content strong {
+            color: var(--text-primary);
+        }
+        
+        .legal-summary {
+            padding: 16px 24px;
+            background: var(--background);
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 60px 0 80px;
+            }
+            
+            .requirements-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+        
+        .features-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            font-weight: 500;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <img src="https://raw.githubusercontent.com/burakcebecioglu/burakcebecioglu.github.io/c7655e1a08e2257d149691dee9ef56dcf94d0f11/assets/icon.svg" alt="Orkestrix">
+                </div>
+                Orkestrix
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#setup">Setup</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Professional Container Management for macOS</h1>
+                <p class="hero-subtitle">Seamlessly integrate with Apple Container CLI</p>
+                <p class="hero-description">
+                    Experience Apple's groundbreaking containerization technology through a beautifully crafted native SwiftUI interface. 
+                    Orkestrix provides intuitive visual management while maintaining full compatibility with Apple's Container CLI for advanced workflows.
+                </p>
+                <div class="cta-buttons">
+                    <a href="https://apps.apple.com/app/orkestrix" class="app-store-badge" target="_blank" rel="noopener noreferrer">
+                        <img src="https://raw.githubusercontent.com/burakcebecioglu/burakcebecioglu.github.io/c7655e1a08e2257d149691dee9ef56dcf94d0f11/assets/Download_on_the_App_Store_Badge_US-UK_RGB_wht_092917.svg" 
+                             alt="Download on the App Store" 
+                             class="app-store-badge-white">
+                        <img src="https://raw.githubusercontent.com/burakcebecioglu/burakcebecioglu.github.io/c7655e1a08e2257d149691dee9ef56dcf94d0f11/assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" 
+                             alt="Download on the App Store" 
+                             class="app-store-badge-black">
+                    </a>
+                    <a href="#setup" class="btn btn-secondary">
+                        ⚙️ Setup Guide
+                    </a>
+                </div>
+                
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 20px;">
+                    macOS 26 beta • Apple silicon required • Subscription-based
+                </p>
+            </div>
+        </section>
+
+        <section class="features" id="features">
+            <div class="container">
+                <h2>Why Choose Orkestrix</h2>
+                <p class="features-subtitle">Powerful container management with the elegance of native macOS design</p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🖥️</div>
+                        <h3>Native macOS Experience</h3>
+                        <p>Built with Swift 6 and SwiftUI, Orkestrix provides a native interface designed for macOS. No Electron apps, no web wrappers - just pure native performance optimized for your workflow.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3>VM-Level Isolation</h3>
+                        <p>Each container runs in its own lightweight virtual machine, providing superior security compared to traditional shared VM approaches. Maximum isolation with minimal overhead.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📦</div>
+                        <h3>OCI Compliant</h3>
+                        <p>Full compatibility with Docker Hub, GitHub Container Registry, and any OCI-compliant registry. Use your existing images and workflows without modification.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Real-time Monitoring</h3>
+                        <p>Orkestrix provides live container status, resource usage, logs, and process monitoring. Deep insights into container behavior with integrated logging system support.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🏢</div>
+                        <h3>Enterprise Ready</h3>
+                        <p>Orkestrix provides advanced security analysis, multi-registry support, and comprehensive container lifecycle management. Built for teams and organizations that demand reliability.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🔧</div>
+                        <h3>Developer Focused</h3>
+                        <p>Orkestrix provides an intuitive interface for common development workflows. Create, manage, and monitor containers without leaving your development environment. Seamless CLI integration included.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="requirements">
+            <div class="container">
+                <div class="requirements-content">
+                    <div>
+                        <h2>System Requirements</h2>
+                        <ul class="requirements-list">
+                            <li><span class="check">✓</span> Mac with Apple silicon</li>
+                            <li><span class="check">✓</span> macOS 26 beta or later</li>
+                            <li><span class="check">✓</span> Orkestrix subscription</li>
+                        </ul>
+                        
+                        <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                            Orkestrix works with Apple's new containerization framework introduced in macOS 26, requiring Apple silicon for the underlying virtualization technology.
+                        </p>
+                        
+                        <a href="https://developer.apple.com/download/" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                            Get macOS 26 beta
+                        </a>
+                    </div>
+                    
+                    <div>
+                        <div style="background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 40px; border-radius: 16px; color: white; text-align: center;">
+                            <h3 style="font-size: 1.5rem; margin-bottom: 16px;">Why Apple silicon?</h3>
+                            <p style="opacity: 0.9; line-height: 1.6;">
+                                Orkestrix requires Apple silicon processors to access the advanced virtualization capabilities needed for secure, isolated container environments.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="setup-section" id="setup">
+            <div class="container">
+                <h2>Quick Setup Guide</h2>
+                
+                <div class="setup-steps">
+                    <div class="setup-step">
+                        <div class="step-number">1</div>
+                        <h3>Install macOS 26 beta</h3>
+                        <p>Download and install the macOS 26 beta from Apple Developer portal. Orkestrix requires this version for containerization support.</p>
+                    </div>
+                    
+                    <div class="setup-step">
+                        <div class="step-number">2</div>
+                        <h3>Install Apple Container CLI</h3>
+                        <p>Download Apple's container CLI from GitHub releases. Orkestrix provides a GUI interface, and you can also use the CLI directly for your workflows.</p>
+                    </div>
+                    
+                    <div class="setup-step">
+                        <div class="step-number">3</div>
+                        <h3>Download Orkestrix</h3>
+                        <p>Get Orkestrix from the App Store and subscribe to Orkestrix for full functionality.</p>
+                    </div>
+                </div>
+                
+                <div class="cli-setup">
+                    <h3>🔧 Apple Container CLI Installation</h3>
+                    <p style="opacity: 0.8; margin-bottom: 20px;">Download and install Apple's container CLI tool for command-line access:</p>
+                    
+                    <pre><code># Download from GitHub releases
+curl -L https://github.com/apple/container/releases/download/0.1.0/container-0.1.0-installer-signed.pkg -o container.pkg
+
+# Install the package
+sudo installer -pkg container.pkg -target /
+
+# Verify installation
+container --version</code></pre>
+                    
+                    <div style="background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 8px; margin-bottom: 16px;">
+                        <p style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 18px;">📥</span>
+                            <strong>Direct Download:</strong> 
+                            <a href="https://github.com/apple/container/releases" style="color: var(--success); text-decoration: none;" target="_blank" rel="noopener noreferrer">
+                                github.com/apple/container/releases
+                            </a>
+                        </p>
+                    </div>
+                    
+                    <p style="opacity: 0.8;">
+                        💡 <strong>Pro Tip:</strong> CLI gives you unlimited control—Orkestrix makes it effortless. Every update brings new features to simplify complex container workflows.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Orkestrix</h4>
+                    <p style="color: rgba(255, 255, 255, 0.7);">
+                        Professional container management for macOS 26. Built with Swift 6 and SwiftUI for the ultimate native Mac experience.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="https://apps.apple.com/app/orkestrix" target="_blank" rel="noopener noreferrer">Download from the App Store</a></li>
+                        <li><a href="https://developer.apple.com/videos/play/wwdc2025/346/" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/apple/container/" target="_blank" rel="noopener noreferrer">Apple Container CLI</a></li>
+                        <li><a href="https://developer.apple.com/download/" target="_blank" rel="noopener noreferrer">macOS 26 beta</a></li>
+                        <li><a href="https://developer.apple.com/videos/play/wwdc2025/346/" target="_blank" rel="noopener noreferrer">WWDC Session</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Legal & Contact</h4>
+                    <ul>
+                        <li><a href="terms.html">Terms & Conditions</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="feedback.html">Feedback & Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Orkestrix. All rights reserved.</p>
+                <p style="margin-top: 8px; font-size: 0.85rem; opacity: 0.8;">
+                    Apple, macOS, App Store, Swift, SwiftUI, and Apple silicon are trademarks of Apple Inc., registered in the U.S. and other countries.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
